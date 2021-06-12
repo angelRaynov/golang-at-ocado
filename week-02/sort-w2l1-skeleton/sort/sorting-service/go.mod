@@ -1,11 +1,10 @@
-module github.com/bbsbb/go-at-ocado/sort/sorting-service
+module github.com/angelRaynov/golang-at-ocado/week-02/sort-w2l1-skeleton/sort/sorting-service
 
 go 1.16
 
-replace github.com/bbsbb/go-at-ocado/sort/gen => ../gen
+replace github.com/angelRaynov/golang-at-ocado/week-02/sort-w2l1-skeleton/sort/gen => ../gen
 
 require (
-	github.com/bbsbb/go-at-ocado/sort/gen v0.0.0-00010101000000-000000000000
-	google.golang.org/grpc v1.37.1
-	google.golang.org/protobuf v1.26.0
+	github.com/angelRaynov/golang-at-ocado/week-02/sort-w2l1-skeleton/sort/gen v0.0.0-20210609080336-b8b3ab938e7c // indirect
+	google.golang.org/grpc v1.38.0 // indirect
 )

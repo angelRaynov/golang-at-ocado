@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-option go_package = "github.com/bbsbb/go-at-ocado/sort/gen";
+option go_package = "github.com/angelRaynov/golang-at-ocado/week-02/sort-w2l1-skeleton/sort/gen";
 
 import "types.proto";
 
