@@ -28,7 +28,7 @@ func (s *sortingService) LoadItems(ctx context.Context, request *gen.LoadItemsRe
 
 func (s *sortingService) SelectItem(ctx context.Context, req *gen.SelectItemRequest) (*gen.SelectItemResponse, error) {
 	if s.Selection != nil {
-		return nil, errors.New("put that item in cubby before picking another one")
+		return nil, errors.New("put that item in a cubby before picking another one")
 	}
 
 	if len(s.Items) == 0 {
@@ -58,7 +58,7 @@ func (s *sortingService) MoveItem(ctx context.Context, req *gen.MoveItemRequest)
 	}
 
 	if s.Selection == nil {
-		return nil, errors.New("no selected items")
+		return nil, errors.New("item not selected")
 	}
 
 	log.Printf("Item %s placed in cubby with id = %s", s.Selection.Label, req.Cubby.Id)
