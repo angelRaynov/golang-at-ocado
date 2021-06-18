@@ -10,7 +10,7 @@ import (
 	"github.com/angelRaynov/golang-at-ocado/week-03/fulfillment-skeleton/sort/gen"
 )
 
-func newSortingService() gen.SortingServer {
+func newSortingService() gen.SortingRobotServer {
 	rand.Seed(time.Now().UnixNano())
 	return &sortingService{}
 }
