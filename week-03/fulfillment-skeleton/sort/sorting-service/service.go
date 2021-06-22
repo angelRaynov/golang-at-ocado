@@ -3,21 +3,24 @@ package main
 import (
 	"context"
 	"errors"
+	"github.com/angelRaynov/golang-at-ocado/week-03/fulfillment-skeleton/sort/gen"
 	"log"
 	"math/rand"
+	"strconv"
 	"time"
-
-	"github.com/angelRaynov/golang-at-ocado/week-03/fulfillment-skeleton/sort/gen"
 )
 
 func newSortingService() gen.SortingRobotServer {
 	rand.Seed(time.Now().UnixNano())
-	return &sortingService{}
+	return &sortingService{
+		cubbyToItems: map[string][]*gen.Item{},
+	}
 }
 
 type sortingService struct {
-	Bin        []*gen.Item
-	pickedItem *gen.Item
+	Bin          []*gen.Item
+	pickedItem   *gen.Item
+	cubbyToItems map[string][]*gen.Item
 }
 
 func (s *sortingService) LoadItems(ctx context.Context, req *gen.LoadItemsRequest) (*gen.Empty, error) {
@@ -47,16 +50,33 @@ func (s *sortingService) PickItem(context.Context, *gen.Empty) (*gen.PickItemRes
 	}, nil
 }
 
-func (s *sortingService) PlaceInCubby(context.Context, *gen.PlaceInCubbyRequest) (*gen.Empty, error) {
+func (s *sortingService) PlaceInCubby(ctx context.Context, req *gen.PlaceInCubbyRequest) (*gen.Empty, error) {
 	if s.pickedItem == nil {
 		log.Println("no item is currently picked")
 		return nil, errors.New("no item is currently picked")
+	} else if !isValidCubbyID(req.Cubby.Id) {
+		log.Printf("received invalid cubby id: %s", req.Cubby.Id)
+		return nil, errors.New("invalid cubby ID. Should be in range [1..10]")
 	}
 
+	s.cubbyToItems[req.Cubby.Id] = append(s.cubbyToItems[req.Cubby.Id], s.pickedItem)
 	s.pickedItem = nil
 	return &gen.Empty{}, nil
 }
 
 func (s *sortingService) AuditState(context.Context, *gen.Empty) (*gen.AuditStateResponse, error) {
-	return nil, errors.New("not implemented")
+	cubbiesToItems := []*gen.CubbyToItems{}
+	for cubby, items := range s.cubbyToItems {
+		cubbiesToItems = append(cubbiesToItems, &gen.CubbyToItems{
+			Cubby: &gen.Cubby{Id: cubby},
+			Items: items,
+		})
+	}
+
+	return &gen.AuditStateResponse{CubbiesToItems: cubbiesToItems}, nil
+}
+
+func isValidCubbyID(id string) bool {
+	n, err := strconv.Atoi(id)
+	return err == nil && n >= 1 && n <= 10
 }
